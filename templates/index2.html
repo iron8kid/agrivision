@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<meta charset="utf-8">
+<head>
+  <title>Basic geo (svg)</title>
+  <script type="text/javascript" src="static/jquery.js"></script>
+  <script src="static/d3.v4.min.js"></script>
+</head>
+<style>
+.background {
+  fill: #eee;
+  pointer-events: all;
+}
+
+.map-layer {
+  fill: #fff;
+  stroke: #0b2d46;
+}
+
+.effect-layer{
+  pointer-events:none;
+}
+
+.effect-layer text, text.dummy-text{
+  font-size: 12px;
+}
+</style>
+<body>
+  <div id="content">
+    <svg></svg>
+  </div>
+  <script>
+  //une objet json qui contient la moyenne de tempurature pour chaque champ , [cet objet sera generer par le backend quand on aura la bd]
+
+
+  </script>
+</body>
+</html>

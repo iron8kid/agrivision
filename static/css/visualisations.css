@@ -1,0 +1,17 @@
+.background {
+  fill: #eee;
+  pointer-events: all;
+}
+
+.map-layer {
+  fill: #fff;
+  stroke: #0b2d46;
+}
+
+.effect-layer{
+  pointer-events:none;
+}
+
+.effect-layer text, text.dummy-text{
+  font-size: 12px;
+}
