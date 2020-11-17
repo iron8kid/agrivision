@@ -31,6 +31,8 @@
     <main class="page landing-page" style="padding: 100px;">
         <section class="clean-block features" style="padding: 0px 0px 0px;">
             <div class="container" style="min-width:300px; height:250px;padding: 0px 0px;padding-right: 0px;padding-left: 0px;">
+
+                <!--Cette div permet l'affichage de la map-->
                 <div class="card shadow-sm d-lg-flex justify-content-lg-center align-items-lg-center map_card" style="height:250px;">
 
       <svg></svg>
@@ -40,11 +42,15 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-6" style="padding: 0px;padding-right: 0px;">
+
+                        <!--Cette div permet l'affichage du tableau-->
                         <div class="card shadow-sm d-lg-flex justify-content-lg-center">
                           <p> tableau </p>
                         </div>
                     </div>
                     <div class="col-md-6" style="padding: 0px;padding-right: 0px;">
+
+                        <!--Cette div permet l'affichage du graphique-->
                         <div class="card shadow-sm">
                           <p> graph </p>
                         </div>
@@ -53,8 +59,12 @@
             </div>
         </section>
     </main>
+
+    
 <script src="static/js/visualisation.js"></script>
 <script type="text/javascript">
+
+//zr contient la variable data envoyée avec le template
 var  zr = JSON.parse('{{ z | tojson | safe}}');
 do_it(zr)
 

@@ -7,6 +7,8 @@ def get_x(d):
 
 def get_y(d):
     return d[1]
+
+#Cette fonction sert à déterminer le centre et la zone de délimitation de chaque champs et de la map en entier
 def get_boxes(features):
     boxes=dict()
     min_min_x= Decimal('Infinity')
@@ -35,7 +37,13 @@ def get_boxes(features):
 
 
 class FlaskApp(Flask):
+    
+    #On ajoute ici toutes les fonctions nécessaires au pré-traitement des données à visualiser
+    
+    #Cette méthode sert au pré-traitement des données
     def prepare_data(self,fname):
+        #fname = nom du fichier geojson
+        #Ce fichier doit ce situer dans /static/data
         SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
         json_url = os.path.join(SITE_ROOT, "static","data", fname)
         geojson = json.load(open(json_url))
