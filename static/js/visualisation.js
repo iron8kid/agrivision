@@ -1,6 +1,6 @@
 //Initialisation de la projection (geoMercator)
 var projection = d3.geoMercator();
-
+var map;
 //Initialisation du Path
 var path = d3.geoPath()
     .projection(projection);
@@ -13,13 +13,15 @@ var color = d3.scaleLinear()
 
 //Initialisation des variables
 //org_width contient la largeur de la map à l'ouverture de la page web
-
+//Contient la largeur de la map actuelle
 var org_width =$(".map_card").width(),
-  width =$(".map_card").width(), //Contient la largeur de la map actuelle
-  height = $(".map_card").height(), 
-  centered; //Indique sur quel champs la map est centrée, NULL sinon
+  width =$(".map_card").width(),
+  old_width =$(".map_card").width(),
+  height = $(".map_card").height(),
+  centered,
+  old_centered;//Indique sur quel champs la map est centrée, NULL sinon
 
-//Initialise la balise svg dans index.html 
+//Initialise la balise svg dans index.html
 var svg = d3.select('svg')
 .attr('width', "100%")
 .attr('height', "100%");
@@ -68,14 +70,33 @@ function resizeend() {
         timeout = false;
 
         width =$(".map_card").width()
-        console.log('width after resize'+width)
-        g.transition()
-          .duration(750)
-          .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')translate(' + -org_width/2 + ',' + -height/2 + ')');
-        bigText.transition()
-          .duration(750)
-          .attr('transform', 'translate('  +-width / 2 + ',' + height / 2 + ')translate(' + org_width/2 + ',' + -height/2 + ')');
+        if(width!==old_width)
+        {
+          old_width=width
+          if (centered)
+          {
+            old_centered=centered
+            clicked(null)
+            g.transition()
+              .duration(750)
+              .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')translate(' + -org_width/2 + ',' + -height/2 + ')');
+            bigText.transition()
+              .duration(750)
+              .attr('transform', 'translate('  +-width / 2 + ',' + height / 2 + ')translate(' + org_width/2 + ',' + -height/2 + ')');
+            clicked(old_centered)
 
+          }
+          else {
+            g.transition()
+              .duration(750)
+              .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')translate(' + -org_width/2 + ',' + -height/2 + ')');
+            bigText.transition()
+              .duration(750)
+              .attr('transform', 'translate('  +-width / 2 + ',' + height / 2 + ')translate(' + org_width/2 + ',' + -height/2 + ')');
+
+          }
+
+        }
         }
 }
 window.addEventListener('resize', function(event){
@@ -93,9 +114,13 @@ window.addEventListener('resize', function(event){
 function do_it(data) {
 
     //Centre la map
-    projection.scale(580000)
+    map=data.geojson;
+    bmap=path.bounds(map)
+    s=.85*projection.scale() / Math.max((bmap[1][0]- bmap[0][0]) / width, (bmap[1][1] - bmap[0][1]) / height);
+    projection.scale(s)
                .translate([width / 2, height / 2])
-               .center([-0.3310,44.5327]);
+               .center(data.boxe.center);
+
 
     var features = data.geojson.features;
     color.domain([d3.min(features, avgTemp), d3.max(features, avgTemp)]); //Il y a un gradient de couleur entre la température moyenne minimale et la température moyenne maximale
@@ -133,10 +158,11 @@ function clicked(d) {
 
       // Calcule le centre du champ sélectionné
       if (d && centered !== d) {
-        var centroid = path.centroid(d);
+        var centroid = path.centroid(d),
+            b=path.bounds(d);
+        k = .80 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height);
         x = centroid[0];
         y = centroid[1];
-        k = 3;
         centered = d;
         g.transition()
           .duration(750)

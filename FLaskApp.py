@@ -23,23 +23,19 @@ def get_boxes(features):
         max_y=max(field["geometry"]["coordinates"][0],key=get_y)[1]
         min_x=min(field["geometry"]["coordinates"][0],key=get_x)[0]
         min_y=min(field["geometry"]["coordinates"][0],key=get_y)[1]
-        boxes[field_name]=dict()
-        boxes[field_name]["bounds"]=[[round(min_x,4),round(min_y,4)],[round(max_x,4),round(max_y,4)]]
-        boxes[field_name]["center"]=[round((min_x+max_x)/2,4),round((min_y+max_y)/2,4)]
         min_min_x=min(min_min_x,min_x)
         min_min_y=min(min_min_y,min_y)
         max_max_y=max(max_max_y,max_y)
         max_max_x=max(max_max_x,max_x)
-    boxes["map"]=dict()
-    boxes["map"]["bounds"]=[[round(min_min_x,4),round(min_min_y,4)],[round(max_max_x,4),round(max_max_y,4)]]
-    boxes["map"]["center"]=[round((min_min_x+max_max_x)/2,4),round((min_min_y+max_max_y)/2,4)]
+    boxes["bounds"]=[[round(min_min_x,4),round(min_min_y,4)],[round(max_max_x,4),round(max_max_y,4)]]
+    boxes["center"]=[round((min_min_x+max_max_x)/2,4),round((min_min_y+max_max_y)/2,4)]
     return boxes
 
 
 class FlaskApp(Flask):
-    
+
     #On ajoute ici toutes les fonctions nécessaires au pré-traitement des données à visualiser
-    
+
     #Cette méthode sert au pré-traitement des données
     def prepare_data(self,fname):
         #fname = nom du fichier geojson
@@ -48,6 +44,6 @@ class FlaskApp(Flask):
         json_url = os.path.join(SITE_ROOT, "static","data", fname)
         geojson = json.load(open(json_url))
         data=dict()
-        data["boxes"]=get_boxes(geojson["features"])
+        data["boxe"]=get_boxes(geojson["features"])
         data["geojson"]=geojson
         return data
