@@ -1,7 +1,8 @@
 import os
-from flask import Flask
-from flask import json
+from flask import Flask ,json
 from decimal import Decimal
+
+
 def get_x(d):
     return d[0]
 
@@ -37,13 +38,12 @@ class FlaskApp(Flask):
     #On ajoute ici toutes les fonctions nécessaires au pré-traitement des données à visualiser
 
     #Cette méthode sert au pré-traitement des données
-    def prepare_data(self,fname):
+    def get_map(self,fname):
         #fname = nom du fichier geojson
         #Ce fichier doit ce situer dans /static/data
         SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
         json_url = os.path.join(SITE_ROOT, "static","data", fname)
-        geojson = json.load(open(json_url))
-        data=dict()
-        data["boxe"]=get_boxes(geojson["features"])
-        data["geojson"]=geojson
+        data = json.load(open(json_url))
+        print(type(data))
+
         return data

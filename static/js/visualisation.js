@@ -1,6 +1,8 @@
+
 //Initialisation de la projection (geoMercator)
 var projection = d3.geoMercator();
 var map;
+var data;
 //Initialisation du Path
 var path = d3.geoPath()
     .projection(projection);
@@ -111,18 +113,19 @@ window.addEventListener('resize', function(event){
 
 
 //Permet la visualisation de la map
-function do_it(data) {
+function do_it(d , markers,data) {
 
     //Centre la map
-    map=data.geojson;
+    map=d;
+    data=data;
     bmap=path.bounds(map)
     s=.85*projection.scale() / Math.max((bmap[1][0]- bmap[0][0]) / width, (bmap[1][1] - bmap[0][1]) / height);
     projection.scale(s)
                .translate([width / 2, height / 2])
-               .center(data.boxe.center);
+               .center(projection.invert(path.centroid(map)));
 
 
-    var features = data.geojson.features;
+    var features = d.features;
     color.domain([d3.min(features, avgTemp), d3.max(features, avgTemp)]); //Il y a un gradient de couleur entre la température moyenne minimale et la température moyenne maximale
     //Visualisation de la délimitation de chaque champs
     mapLayer.selectAll('path')
@@ -134,6 +137,19 @@ function do_it(data) {
     .on('mouseover', mouseover)
     .on('mouseout', mouseout)
     .on('click', clicked);
+
+
+    mapLayer
+     .selectAll("mysensors")
+     .data(markers)
+     .enter()
+     .append("image").attr("xlink:href",function(d){ return d.unit=="C" ? "static/image/thermo.png" : "static/image/hum.png"; })
+     .attr("x", function(d){ return projection([d.longitude, d.latitude])[0]-10 })
+     .attr("y", function(d){ return projection([d.longitude, d.latitude])[1]-10 })
+     .attr("height", 20)
+     .attr("width", 20)
+     .on('click', clicked_sensor);
+
      }
 
 //Retourne le nom du champ d
@@ -156,8 +172,10 @@ function fillFn(d){
 function clicked(d) {
       var x, y, k;
 
+
       // Calcule le centre du champ sélectionné
       if (d && centered !== d) {
+        console.log(data[nameFn(d)])
         var centroid = path.centroid(d),
             b=path.bounds(d);
         k = .80 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height);
@@ -194,4 +212,8 @@ function mouseout(d){
 
       //Efface le nom du champ
       bigText.text('');
+}
+function clicked_sensor(d)
+{
+console.log(data[d.parcel_name][d.id])
 }

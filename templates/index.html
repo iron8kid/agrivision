@@ -52,6 +52,7 @@
 
                         <!--Cette div permet l'affichage du graphique-->
                         <div class="card shadow-sm">
+                          <img src="static/image/LOGO_clair.png"  style="width: 20px;height: 20px;" data-bs-hover-animate="tada">
                           <p> graph </p>
                         </div>
                     </div>
@@ -60,14 +61,18 @@
         </section>
     </main>
 
-    
+
 <script src="static/js/visualisation.js"></script>
 <script type="text/javascript">
 
 //zr contient la variable data envoyée avec le template
-var  zr = JSON.parse('{{ z | tojson | safe}}');
-do_it(zr)
+var  map = JSON.parse('{{ map | tojson | safe}}');
+var  data = JSON.parse('{{data | tojson| safe}}');
+var  markers = JSON.parse('{{markers | tojson| safe}}');
+do_it(map , markers,data)
+console.log(markers)
 
+console.log(data)
 </script>
 </body>
 
