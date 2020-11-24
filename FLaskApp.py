@@ -34,6 +34,8 @@ def get_boxes(features):
 
 
 class FlaskApp(Flask):
+    data=dict()
+    markers=dict()
 
     #On ajoute ici toutes les fonctions nécessaires au pré-traitement des données à visualiser
 
@@ -44,6 +46,6 @@ class FlaskApp(Flask):
         SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
         json_url = os.path.join(SITE_ROOT, "static","data", fname)
         data = json.load(open(json_url))
-        print(type(data))
+
 
         return data

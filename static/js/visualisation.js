@@ -3,6 +3,7 @@
 var projection = d3.geoMercator();
 var map;
 var data;
+var tablename=$(".table_name")
 //Initialisation du Path
 var path = d3.geoPath()
     .projection(projection);
@@ -175,7 +176,8 @@ function clicked(d) {
 
       // Calcule le centre du champ sélectionné
       if (d && centered !== d) {
-        console.log(data[nameFn(d)])
+        tablename.html(nameFn(d));
+        load_table(d)
         var centroid = path.centroid(d),
             b=path.bounds(d);
         k = .80 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height);
@@ -197,6 +199,8 @@ function clicked(d) {
       mapLayer.selectAll('path')
           .style('fill', function(d){return centered && d===centered ? '#0b2d46' : fillFn(d);});
 
+
+
 }
 
 //Colorie le champ survolé
@@ -215,5 +219,21 @@ function mouseout(d){
 }
 function clicked_sensor(d)
 {
-console.log(data[d.parcel_name][d.id])
+
+clicked(get_field(d.parcel_name))
 }
+function get_field(name)
+{
+  f=map.features.filter(function (field) {
+  return nameFn(field) === name;
+});
+return f[0]
+}
+
+
+function  load_table(d) {
+  name=nameFn(d)
+      $(".sensors").load("/load_table",{
+        field_name:name
+      });
+  }

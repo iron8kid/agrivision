@@ -41,12 +41,24 @@ def index():
                 })
 
                 data[parcel.name][sensor.id]={
+                "name":sensor.name,
+                "unit":sensor.unit,
                 "x":dates,
                 "y":values
                 }
+    app.data=data
+    app.markers=markers
 
     return render_template('index.html',map=map_data,data=data,markers=markers) #à modifier quand on aura la base de données
 
-'''@app.route('/get_map')
-def get_map():
-    return data'''
+@app.route('/load_table',methods=['POST'])
+def load_table():
+    name = request.form.get('field_name')
+
+    if(name in app.data.keys()):
+        print(app.data[name])
+        print("yes")
+        return render_template('table.html',data=app.data[name])
+    else:
+        print("no")
+        return render_template('table.html',data=[])
