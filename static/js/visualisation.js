@@ -1,4 +1,13 @@
-
+var $table = $('.table')
+graph = document.getElementById('graph');
+ var tab_col = [
+   {
+     'id': 'id_capteur',
+     'name': 'nom-caapteur',
+     'function': 'Humidité/Température'
+   }
+ ]
+ $table.bootstrapTable({data: tab_col})
 //Initialisation de la projection (geoMercator)
 var projection = d3.geoMercator();
 var map;
@@ -75,6 +84,7 @@ function resizeend() {
         width =$(".map_card").width()
         if(width!==old_width)
         {
+          //Plotly.relayout(graph)
           old_width=width
           if (centered)
           {
@@ -114,19 +124,21 @@ window.addEventListener('resize', function(event){
 
 
 //Permet la visualisation de la map
-function do_it(d , markers,data) {
-
+function do_it(d , data_sensor) {
     //Centre la map
     map=d;
-    data=data;
+    data=data_sensor;
     bmap=path.bounds(map)
     s=.85*projection.scale() / Math.max((bmap[1][0]- bmap[0][0]) / width, (bmap[1][1] - bmap[0][1]) / height);
+
+
+
     projection.scale(s)
                .translate([width / 2, height / 2])
                .center(projection.invert(path.centroid(map)));
 
 
-    var features = d.features;
+    var features = map.features;
     color.domain([d3.min(features, avgTemp), d3.max(features, avgTemp)]); //Il y a un gradient de couleur entre la température moyenne minimale et la température moyenne maximale
     //Visualisation de la délimitation de chaque champs
     mapLayer.selectAll('path')
@@ -142,7 +154,7 @@ function do_it(d , markers,data) {
 
     mapLayer
      .selectAll("mysensors")
-     .data(markers)
+     .data(data)
      .enter()
      .append("image").attr("xlink:href",function(d){ return d.unit=="C" ? "static/image/thermo.png" : "static/image/hum.png"; })
      .attr("x", function(d){ return projection([d.longitude, d.latitude])[0]-10 })
@@ -172,8 +184,6 @@ function fillFn(d){
 //Cette fonction sert à zoomer/dézoomer quand on clique sur un champ
 function clicked(d) {
       var x, y, k;
-
-
       // Calcule le centre du champ sélectionné
       if (d && centered !== d) {
         tablename.html(nameFn(d));
@@ -229,11 +239,37 @@ function get_field(name)
 });
 return f[0]
 }
-
-
-function  load_table(d) {
-  name=nameFn(d)
-      $(".sensors").load("/load_table",{
-        field_name:name
-      });
+function  load_table(d){
+    sensors=data.filter(sensor=>sensor.parcel_name===nameFn(d))
+    if (sensors.length > 0)
+    {
+      $table.bootstrapTable('load',sensors)
+    }
+    else
+    {
+      $table.bootstrapTable('load',tab_col)
+    }
   }
+  $(".table").on('click-row.bs.table', function (row, $element, field) {
+    if($element.hasOwnProperty('x'))
+    {
+
+      var layout = {
+  title: $element.function,
+  xaxis: {
+    title: 'date',
+    tickangle: 90,
+    automargin: true,
+    showgrid: false,
+    zeroline: false
+  },
+  yaxis: {
+    title:  $element.unit,
+    showline: false
+  }
+};
+      var config = {responsive: true}
+      Plotly.newPlot(graph, [{
+  	x:$element.x,
+  	y:$element.y }] ,layout,config);
+  }});

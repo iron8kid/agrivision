@@ -34,8 +34,7 @@ def get_boxes(features):
 
 
 class FlaskApp(Flask):
-    data=dict()
-    markers=dict()
+    data=list()
 
     #On ajoute ici toutes les fonctions nécessaires au pré-traitement des données à visualiser
 
