@@ -83,7 +83,9 @@
 <script src="static/js/visualisation.js"></script>
 <script type="text/javascript">
 
-//zr contient la variable data envoyée avec le template
+//data contient la variable data envoyée avec le template
+//data est une liste d'objets
+//map contient le fichier geojson
 var  map = JSON.parse('{{ map | tojson | safe}}');
 var  data = JSON.parse('{{data | tojson| safe}}');
 do_it(map ,data)

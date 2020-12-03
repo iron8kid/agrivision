@@ -1,3 +1,5 @@
+#Création des classes associées à la base de données (ORM)
+
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 class Farm(db.Model):

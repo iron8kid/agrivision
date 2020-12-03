@@ -1,3 +1,4 @@
+//Initialisation du tableau
 var $table = $('.table')
 graph = document.getElementById('graph');
  var tab_col = [
@@ -8,20 +9,26 @@ graph = document.getElementById('graph');
    }
  ]
  $table.bootstrapTable({data: tab_col})
+
+
 //Initialisation de la projection (geoMercator)
 var projection = d3.geoMercator();
 var map;
 var data;
 var tablename=$(".table_name")
+
+
 //Initialisation du Path
 var path = d3.geoPath()
     .projection(projection);
+
 
 //Creation de la variable couleurs des champs
 var color = d3.scaleLinear()
 .domain([-10, 40]) //Temperature de -10 à 40 [Ces deux valeurs seront modifiées après dynamiquement]
 .clamp(true)
 .range(['#e6eba9', '#cddb38']); //Couleurs de  #e6eba9 à #cddb38
+
 
 //Initialisation des variables
 //org_width contient la largeur de la map à l'ouverture de la page web
@@ -33,6 +40,7 @@ var org_width =$(".map_card").width(),
   centered,
   old_centered;//Indique sur quel champs la map est centrée, NULL sinon
 
+
 //Initialise la balise svg dans index.html
 var svg = d3.select('svg')
 .attr('width', "100%")
@@ -43,6 +51,7 @@ svg.append('rect')
 .attr('height', "100%")
 .on('click', clicked); //Lance la fonction "click" lors d'un clique utilisateur
 
+
 //Ajout d'une balise group qui contient le champs
 var g = svg.append('g');
 var mapLayer = g.append('g')
@@ -51,6 +60,7 @@ var bigText = g.append('text')
 .classed('big-text', true)
 .attr('x', 20)
 .attr('y', 45);
+
 
 //Récupération des températures moyennes sur chaque section de champs (pour l'instant valeurs arbitraires)
 var  avg_temp_field ={
@@ -69,6 +79,7 @@ var  avg_temp_field ={
   "Tritox":8,
   "Kim Carnes":27
 }
+
 
 //Permet à la map d'être responsive
 //Début
@@ -151,7 +162,7 @@ function do_it(d , data_sensor) {
     .on('mouseout', mouseout)
     .on('click', clicked);
 
-
+    //Affichage des capteurs 
     mapLayer
      .selectAll("mysensors")
      .data(data)
@@ -164,6 +175,7 @@ function do_it(d , data_sensor) {
      .on('click', clicked_sensor);
 
      }
+
 
 //Retourne le nom du champ d
 function nameFn(d){
@@ -227,11 +239,15 @@ function mouseout(d){
       //Efface le nom du champ
       bigText.text('');
 }
+
+//Fonction qui s'exécute lorsqu'on clique sur un capteur
 function clicked_sensor(d)
 {
 
 clicked(get_field(d.parcel_name))
 }
+
+//Retourne les données associées à la parcelle identifiée par "name"
 function get_field(name)
 {
   f=map.features.filter(function (field) {
@@ -239,6 +255,8 @@ function get_field(name)
 });
 return f[0]
 }
+
+//Affichage des données du tableau
 function  load_table(d){
     sensors=data.filter(sensor=>sensor.parcel_name===nameFn(d))
     if (sensors.length > 0)
@@ -250,6 +268,8 @@ function  load_table(d){
       $table.bootstrapTable('load',tab_col)
     }
   }
+
+  //Eventlistener de clique sur une ligne et affiche le graphe 
   $(".table").on('click-row.bs.table', function (row, $element, field) {
     if($element.hasOwnProperty('x'))
     {
