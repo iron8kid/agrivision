@@ -4,7 +4,7 @@ graph = document.getElementById('graph');
  var tab_col = [
    {
      'id': 'id_capteur',
-     'name': 'nom-caapteur',
+     'name': 'nom-capteur',
      'function': 'Humidité/Température'
    }
  ]
