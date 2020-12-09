@@ -41,7 +41,7 @@ def index():
             #On parcourt tous les capteurs
 
             for sensor in sensors:
-                value_n_date=db.session.query(Value.value,Value.created).filter(Value.sensor_object_id==sensor.id).order_by(Value.created).all()
+                value_n_date=db.session.query(Value.value,Value.created).filter(Value.sensor_object_id==sensor.id).order_by(Value.created.desc()).all()
 
                 #On récupère les valeurs mesurées par le capteur
                 values=list(map(lambda d : d[0],value_n_date))
