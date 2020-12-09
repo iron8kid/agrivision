@@ -87,8 +87,9 @@
 //data est une liste d'objets
 //map contient le fichier geojson
 var  map = JSON.parse('{{ map | tojson | safe}}');
-var  data = JSON.parse('{{data | tojson| safe}}');
-do_it(map ,data)
+var  data = JSON.parse('{{data | tojson }}');
+var avg_temp_field = JSON.parse('{{avg_temp_field | tojson| safe}}');
+do_it(map ,data,avg_temp_field)
 </script>
 </body>
 

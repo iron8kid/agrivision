@@ -63,23 +63,7 @@ var bigText = g.append('text')
 
 
 //Récupération des températures moyennes sur chaque section de champs (pour l'instant valeurs arbitraires)
-var  avg_temp_field ={
-  "Falkor":20,
-  "Bonnie Tyler":30,
-  "Skysheen":0,
-  "Super Joe":15,
-  "Bonersaurus":10,
-  "Mr Hands":25,
-  "chikorita":25,
-  "Bloodbane":22,
-  "Cartman":18,
-  "Kabbalah":11,
-  "Nauty":5,
-  "Undyne":7,
-  "Tritox":8,
-  "Kim Carnes":27
-}
-
+var  avg_temp_field ;
 
 //Permet à la map d'être responsive
 //Début
@@ -135,11 +119,12 @@ window.addEventListener('resize', function(event){
 
 
 //Permet la visualisation de la map
-function do_it(d , data_sensor) {
+function do_it(d , data_sensor,avg) {
     //Centre la map
     map=d;
     data=data_sensor;
     bmap=path.bounds(map)
+    avg_temp_field = avg;
     s=.85*projection.scale() / Math.max((bmap[1][0]- bmap[0][0]) / width, (bmap[1][1] - bmap[0][1]) / height);
 
 
@@ -162,7 +147,7 @@ function do_it(d , data_sensor) {
     .on('mouseout', mouseout)
     .on('click', clicked);
 
-    //Affichage des capteurs 
+    //Affichage des capteurs
     mapLayer
      .selectAll("mysensors")
      .data(data)
@@ -269,16 +254,16 @@ function  load_table(d){
     }
   }
 
-  //Eventlistener de clique sur une ligne et affiche le graphe 
+  //Eventlistener de clique sur une ligne et affiche le graphe
   $(".table").on('click-row.bs.table', function (row, $element, field) {
     if($element.hasOwnProperty('x'))
     {
+      console.log($element.x)
 
       var layout = {
   title: $element.function,
   xaxis: {
     title: 'date',
-    tickangle: 90,
     automargin: true,
     showgrid: false,
     zeroline: false

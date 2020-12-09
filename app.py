@@ -24,19 +24,22 @@ map_data=app.get_map("chateau_guiraud.geojson")
 @app.route('/')
 def index():
     data=list()
-    markers=[]
+    avg_temp_field=dict()
 
     #On parcourt toutes les parcelles
     for parcel in Parcel.query.all():
         objects=parcel.objects
 
         #Dans chaque parcelle, on parcourt tous les objets
+        i=0
+        avg=0
         for object in objects:
 
-            #On regroupe les capteurs appartenant à un même objet 
+            #On regroupe les capteurs appartenant à un même objet
             sensors=object.sensors
 
             #On parcourt tous les capteurs
+
             for sensor in sensors:
                 value_n_date=db.session.query(Value.value,Value.created).filter(Value.sensor_object_id==sensor.id).order_by(Value.created).all()
 
@@ -44,7 +47,7 @@ def index():
                 values=list(map(lambda d : d[0],value_n_date))
 
                 #On récupère la date associée
-                dates=list(map(lambda d : d[1],value_n_date))
+                dates=list(map(lambda d : str(d[1]),value_n_date))
                 data.append({
                 "parcel_name":parcel.name,
                 "id":sensor.id,
@@ -56,9 +59,15 @@ def index():
                 "latitude":object.latitude,
                 "function":'Température' if sensor.unit == 'C' else 'Humidité'
                 })
-
-    #data est une liste de capteurs, chaque capteur est représenté sous la forme d'un dictionnaire 
+                if sensor.unit=='C':
+                    i+=len(values)
+                    avg+=sum(values)
+        if i == 0:
+            avg_temp_field[parcel.name]=25
+        else :
+            avg_temp_field[parcel.name]=avg/i
+    #data est une liste de capteurs, chaque capteur est représenté sous la forme d'un dictionnaire
     #(ex : parcel_name, id, name, unit, x, y, longitude, latitude, function)
     app.data=data
 
-    return render_template('index.html',map=map_data,data=data)
+    return render_template('index.html',map=map_data,data=data,avg_temp_field=avg_temp_field)
