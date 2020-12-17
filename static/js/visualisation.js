@@ -258,7 +258,6 @@ function  load_table(d){
   $(".table").on('click-row.bs.table', function (row, $element, field) {
     if($element.hasOwnProperty('x'))
     {
-      console.log($element.x)
 
       var layout = {
   title: $element.function,

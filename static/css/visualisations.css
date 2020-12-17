@@ -31,12 +31,12 @@
 
 
 @font-face {
-  font-family: 'AraHamah-regular';
-  src: url(/static/font/Ara\ Hamah\ 1964\ R.otf);
+  font-family: 'OpenSansSemiBold';
+  src: url(/static/font/OpenSansSemiBold.ttf);
 }
 
 
 @font-face {
-  font-family: 'AraHamah-bold';
-  src: url(/static/font/AraHamahAlThawra.ttf);
+  font-family: 'OpenSansRegular';
+  src: url(/static/font/OpenSansRegular.ttf);
 }
