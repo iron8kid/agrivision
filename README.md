@@ -3,15 +3,22 @@ Notre projet entreprise a pour but d’implémenter une interface web de visuali
 
 Pour installer les modules nécessaires :
 - Se placer dans le dossier et passer la commande : 
-    pip install -r requirements.txt
+```
+pip install -r requirements.txt
+```
 
 Pour exécuter le serveur, passer la commande : 
-    flask run
-
+```
+flask run
+```
 Se rendre à l'adresse URL indiquée.
 
-PS: Pour indiquer au terminal l'application avec laquelle travailler en exportant la variable d'environnement 
-    FLASK_APP:set FLASK_APP=app.py (app.py dans notre cas seulement)
+PS: Pour indiquer au terminal l'application avec laquelle travailler en exportant la variable d'environnement FLASK_APP:
+```
+set FLASK_APP=app.py (app.py dans notre cas seulement)
+```
 Pour exécuter le serveur en mode développement 
-    set FLASK_ENV=development
+ ```
+set FLASK_ENV=development
+```
 
