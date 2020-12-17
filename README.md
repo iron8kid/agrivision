@@ -22,3 +22,4 @@ Pour exécuter le serveur en mode développement
 set FLASK_ENV=development
 ```
 
+![](view.gif)
